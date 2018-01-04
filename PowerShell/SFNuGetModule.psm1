@@ -347,7 +347,8 @@ function Update-SpecFile{
 	$name = $manifest.DocumentElement.Attributes["Name"].Value
 	if ($name.EndsWith("Pkg")){$name = $name.Substring(0, $name.Length-3)}
     $version = $manifest.DocumentElement.Attributes["Version"].Value
-    $assembly = [System.Reflection.Assembly]::LoadFrom($executable)
+    $bytes = [System.IO.File]::ReadAllBytes($executable)
+    $assembly = [System.Reflection.Assembly]::Load($bytes)
 
     $contentXml = [xml] (Get-Content $specFile)
 	
