@@ -48,8 +48,8 @@ function New-ServiceFabricNuGetPackage {
     $WorkingFolder = New-TemporaryDirectory
 
     #copy files
-    Robocopy $InputPath $WorkingFolder /S /NS /NC /NFL /NDL /NP /NJH /NJS    
-    Robocopy "$(Get-ScriptDirectory)\tools" $WorkingFolder\tools /S /NS /NC /NFL /NDL /NP /NJH /NJS
+    Copy-Item "$InputPath\*" $WorkingFolder -Recurse -Force -Container
+    Copy-Item "$(Get-ScriptDirectory)\tools\*" $WorkingFolder\tools -Recurse -Force -Container
     Copy-Item "$(Get-ScriptDirectory)\NuGet.exe" $WorkingFolder
     Copy-Item "$(Get-ScriptDirectory)\NuGet.config" $WorkingFolder
     
