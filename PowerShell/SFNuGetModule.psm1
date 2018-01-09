@@ -49,7 +49,8 @@ function New-ServiceFabricNuGetPackage {
 
     #copy files
     Copy-Item "$InputPath\*" $WorkingFolder -Recurse -Force -Container
-    Copy-Item "$(Get-ScriptDirectory)\tools\*" $WorkingFolder\tools -Recurse -Force -Container
+    New-Item -Path "$WorkingFolder\tools\" -ItemType Directory -Force
+    Copy-Item "$(Get-ScriptDirectory)\tools\*" "$WorkingFolder\tools\" -Recurse -Force
     Copy-Item "$(Get-ScriptDirectory)\NuGet.exe" $WorkingFolder
     Copy-Item "$(Get-ScriptDirectory)\NuGet.config" $WorkingFolder
     
