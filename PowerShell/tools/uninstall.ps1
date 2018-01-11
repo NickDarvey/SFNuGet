@@ -62,21 +62,23 @@ function cleanAppManifest($appXml, $srvXml) {
     }
 }
 
-$srcFolder = Get-Item $installPath\*Pkg | Where-Object {$_.Mode -match 'd'}
+$srcFolders = Get-Item $installPath\*Pkg | Where-Object {$_.Mode -match 'd'}
 $destFolder = getProjectDirectory($project)
 $destFolder = "$destFolder\ApplicationPackageRoot"
 
-$appMainfest = "$destFolder\ApplicationManifest.xml"
-$srvManifest = "$destFolder\" + $srcFolder.Name + "\ServiceManifest.xml"
+Foreach($srcFolder in $srcFolders) {
+    $appMainfest = "$destFolder\ApplicationManifest.xml"
+    $srvManifest = "$srcFolder\ServiceManifest.xml"
 
-$appXml = [xml](Get-Content $appMainfest)
-$srvXml = [xml](Get-Content $srvManifest)
+    $appXml = [xml](Get-Content $appMainfest)
+    $srvXml = [xml](Get-Content $srvManifest)
 
-cleanAppManifest $appXml $srvXml
+    cleanAppManifest $appXml $srvXml
 
-$appXml.Save($appMainfest)
+    $appXml.Save($appMainfest)
 
 
-$project.ProjectItems.Item("ApplicationPackageRoot").ProjectItems.Item($srcFolder.Name).Remove()
-Remove-Item ("$destFolder\" + $srcFolder.Name) -Recurse -Force -ErrorAction SilentlyContinue
-Remove-Item ("$destFolder\" + $srcFolder.Name) -Recurse -Force -ErrorAction SilentlyContinue
+    $project.ProjectItems.Item("ApplicationPackageRoot").ProjectItems.Item($srcFolder.Name).Remove()
+    Remove-Item ("$destFolder\" + $srcFolder.Name) -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item ("$destFolder\" + $srcFolder.Name) -Recurse -Force -ErrorAction SilentlyContinue
+}
